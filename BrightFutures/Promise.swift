@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 import Foundation
+import Result
 
 /// The source of a future. Create a `Promise` when you are
 /// performing an asynchronous task and want to return a future.
@@ -44,8 +45,8 @@ public class Promise<T> {
             switch result {
             case .Success(let val):
                 self.success(val.value)
-            case .Failure(let err):
-                self.failure(err)
+            case .Failure(let box):
+                self.failure(box.value)
             }
         }
     }
@@ -76,13 +77,13 @@ public class Promise<T> {
 
     /// Completes the promise's future with the given result
     /// See `future.complete(result: Result<T>)`
-    public func complete(result: Result<T>) {
+    public func complete(result: Result<T, NSError>) {
         return self.future.complete(result)
     }
     
     /// Attempts to complete the promise's future with the given result
     /// See `future.tryComplete(result: Result<T>)`
-    public func tryComplete(result: Result<T>) -> Bool {
+    public func tryComplete(result: Result<T, NSError>) -> Bool {
         return self.future.tryComplete(result)
     }
     
